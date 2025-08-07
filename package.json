@@ -14,7 +14,6 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist/**/*",
-    "templates/**/*",
     "README.md",
     "LICENSE"
   ],
@@ -31,11 +30,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run clean && npm run build",
-    "release": "npm run build && npm publish",
-    "test:polar": "node scripts/test-polar.js",
-    "checkout:create": "node scripts/create-checkout.js",
-    "checkout:free": "node scripts/create-free-checkout.js",
-    "serve:website": "node scripts/serve-success.js"
+    "release": "npm run build && npm publish"
   },
   "keywords": [
     "ai",
