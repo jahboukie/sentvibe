@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentVibe Pro - Payment Success</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #718096;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .license-key {
+            background: #f7fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 1.1rem;
+            color: #2d3748;
+            word-break: break-all;
+        }
+        
+        .steps {
+            text-align: left;
+            margin: 2rem 0;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+        
+        .step-description {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            margin: 0.5rem 0;
+            display: inline-block;
+        }
+        
+        .features {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .features h3 {
+            color: #22543d;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .feature-list li {
+            color: #2f855a;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .feature-list li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+        
+        .support {
+            background: #fffaf0;
+            border: 1px solid #fbd38d;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .support h3 {
+            color: #c05621;
+            margin-bottom: 1rem;
+        }
+        
+        .button {
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+            transition: background 0.3s;
+        }
+        
+        .button:hover {
+            background: #5a67d8;
+        }
+        
+        .button.secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+        
+        .button.secondary:hover {
+            background: #cbd5e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">🎉</div>
+        <h1>Welcome to SentVibe Pro!</h1>
+        <p class="subtitle">Your payment was successful. You now have access to the full AI-native development experience.</p>
+        
+        <div class="license-key">
+            <strong>Your License Key:</strong><br>
+            <span id="license-key">Check your email for your license key</span>
+        </div>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Install SentVibe CLI</div>
+                    <div class="step-description">
+                        Install globally via npm:
+                        <div class="code">npm install -g sentvibe</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Activate Your License</div>
+                    <div class="step-description">
+                        Use your license key to activate Pro features:
+                        <div class="code">sv license activate &lt;your-license-key&gt;</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Start Using Pro Features</div>
+                    <div class="step-description">
+                        Test your code safely in the sandbox:
+                        <div class="code">sv sandbox test</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <h3>🚀 Your Pro Features</h3>
+            <ul class="feature-list">
+                <li>Secure sandbox environment for safe code testing</li>
+                <li>95% confidence scoring before deployment</li>
+                <li>Unlimited sandbox executions</li>
+                <li>Priority support and early access</li>
+                <li>All Free tier features (unlimited memory, VS Code integration)</li>
+            </ul>
+        </div>
+        
+        <div class="support">
+            <h3>📞 Need Help?</h3>
+            <p>As a Pro user, you have priority support:</p>
+            <ul style="list-style: none; margin-top: 1rem;">
+                <li>📧 Email: support@sentvibe.dev</li>
+                <li>💬 Discord: discord.gg/sentvibe</li>
+                <li>📚 Docs: docs.sentvibe.dev</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <a href="https://docs.sentvibe.dev" class="button">📚 View Documentation</a>
+            <a href="https://github.com/sentvibe/sentvibe" class="button secondary">⭐ Star on GitHub</a>
+        </div>
+        
+        <p style="margin-top: 2rem; color: #718096; font-size: 0.9rem;">
+            Thank you for supporting SentVibe! Your subscription helps us build the future of AI-native development.
+        </p>
+    </div>
+    
+    <script>
+        // Try to extract license key from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const licenseKey = urlParams.get('license_key') || urlParams.get('key');
+        
+        if (licenseKey) {
+            document.getElementById('license-key').textContent = licenseKey;
+        }
+        
+        // Auto-copy license key to clipboard when clicked
+        document.querySelector('.license-key').addEventListener('click', function() {
+            const keyText = document.getElementById('license-key').textContent;
+            if (keyText !== 'Check your email for your license key') {
+                navigator.clipboard.writeText(keyText).then(function() {
+                    alert('License key copied to clipboard!');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
