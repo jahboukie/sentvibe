@@ -6,6 +6,35 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-sentvibe-blue)](https://github.com/jahboukie/sentvibe)
 
+## 📖 Table of Contents
+
+### 🚀 Getting Started
+- [What is SentVibe?](#-what-is-sentvibe)
+- [Complete Guide for Vibe Coders](#-complete-guide-for-vibe-coders)
+- [Quick Start](#-quick-start)
+
+### 🧠 Core Features
+- [Core Concepts](#-core-concepts-for-vibe-coders)
+- [Commands Reference](#️-complete-commands-reference)
+- [Free vs Pro Tiers](#-free-vs-pro-tiers)
+
+### 🤖 AI Integration
+- [AI Integration Guide](#-ai-integration-guide)
+- [Advanced Usage](#-advanced-usage)
+- [For AI Agents](#-for-ai-agents)
+
+### 💡 Examples & Best Practices
+- [Real-World Examples](#-real-world-examples)
+- [Best Practices](#-best-practices)
+- [Troubleshooting](#-troubleshooting)
+
+### 🛠️ Development
+- [Architecture](#️-architecture)
+- [Development Setup](#️-development)
+- [Contributing](#-contributing)
+
+---
+
 ## 🎯 What is SentVibe?
 
 SentVibe transforms any project into an **AI-native development environment** that provides:
@@ -30,6 +59,77 @@ When an AI agent (Claude, Copilot, Cursor, etc.) enters a SentVibe-enhanced proj
 
 This environment is designed specifically for AI agents like you! 🤖
 ```
+
+## 📚 Complete Guide for Vibe Coders
+
+> **Follow this exact order for the best experience** 🎯
+
+### 🚀 Step 1: Installation & Setup
+
+#### Prerequisites
+```bash
+# Ensure Node.js 18+ is installed
+node --version  # Should show v18.0.0 or higher
+```
+
+#### Get Your License Key
+1. **Free Trial**: Sign up at [polar.sh/sentvibe](https://polar.sh/sentvibe) to get your `SENTVIBE-MEM-FREE-*` key
+2. **Pro Version**: Subscribe for `SENTVIBE-MEM-BOX-*` key with unlimited features
+
+#### Install SentVibe CLI
+```bash
+npm install -g sentvibe
+```
+
+#### Verify Installation
+```bash
+sentvibe --version  # Should show: 2.0.0
+```
+
+#### Activate Your License
+```bash
+sentvibe license activate SENTVIBE-MEM-FREE-your-key-here
+# ✅ Success: "SentVibe Free Trial (30 days) activated!"
+```
+
+### ⚡ Step 2: Your First 5 Minutes
+
+#### 1. Initialize Your Project
+```bash
+cd your-project
+sentvibe init
+# Creates .sentvibe/ directory and enables AI memory
+```
+
+#### 2. Check Status
+```bash
+sentvibe status
+# Verify SentVibe is active and see available features
+```
+
+#### 3. Generate AI Context
+```bash
+sentvibe memory context
+# Creates intelligent project context for AI agents
+```
+
+#### 4. Test with AI Assistant
+
+**VS Code + Copilot:**
+```
+Ask Copilot: "What is this project about? Use @sentvibe for context."
+```
+
+**Claude/ChatGPT:**
+```
+Prompt: "I'm working on a project with SentVibe. Run 'sentvibe memory context' to understand what I'm building."
+```
+
+#### 5. Start Coding! 🎉
+- ✅ Every file change builds project memory
+- ✅ AI agents get instant project context
+- ✅ Patterns are learned automatically
+- ✅ Memory persists across sessions
 
 ## 🚀 Quick Start
 
@@ -60,6 +160,126 @@ sv sandbox test
 sv ai-status
 ```
 
+## 🧠 Core Concepts for Vibe Coders
+
+### 🎯 Project Memory System
+SentVibe creates a **persistent memory layer** for your projects:
+
+```bash
+your-project/
+├── .sentvibe/           # SentVibe data directory
+│   ├── memory.db        # SQLite database with project knowledge
+│   ├── patterns.json    # Learned development patterns
+│   └── config.json      # Project-specific settings
+├── src/                 # Your code
+└── package.json
+```
+
+**How Memory Works:**
+- 📝 **File Changes**: Every edit builds contextual understanding
+- 🔍 **Pattern Recognition**: Learns your coding style and architecture
+- 🤖 **AI Context**: Provides rich context to AI agents instantly
+- 💾 **Persistence**: Memory survives across sessions, reboots, and months
+
+### 🛡️ Sandbox Environment (Pro)
+**Safe code testing** before touching real files:
+
+```bash
+sentvibe sandbox test file.js
+# Tests code in isolated environment
+# Only deploys if confidence > 95%
+```
+
+**Confidence Scoring:**
+- 🟢 **95-100%**: Safe to deploy automatically
+- 🟡 **80-94%**: Review recommended
+- 🔴 **<80%**: Manual review required
+
+### 🤖 AI Agent Integration
+SentVibe **automatically detects** and welcomes AI agents:
+
+**Supported AI Tools:**
+- ✅ **GitHub Copilot** (VS Code, Neovim)
+- ✅ **Claude** (via Anthropic API, Augment)
+- ✅ **ChatGPT** (via OpenAI API)
+- ✅ **Cursor** (built-in AI)
+- ✅ **Windsurf** (Codeium)
+- ✅ **Codeium** (VS Code extension)
+
+## ⌨️ Complete Commands Reference
+
+### 📋 License Management
+```bash
+# Check license status and features
+sentvibe license status
+
+# Activate license key
+sentvibe license activate <key>
+
+# Compare Free vs Pro features
+sentvibe license compare
+
+# Upgrade to Pro (opens checkout)
+sentvibe license upgrade
+```
+
+### 🧠 Memory Commands
+```bash
+# Generate project context for AI agents
+sentvibe memory context
+
+# Search project memory
+sentvibe memory search "express routes"
+
+# Find similar code patterns
+sentvibe memory similar "API endpoint"
+
+# View learned patterns by technology
+sentvibe memory patterns react
+
+# Add manual memory entry
+sentvibe memory add
+
+# Export memory to file
+sentvibe memory export backup.json
+
+# Clear all project memory
+sentvibe memory clear
+```
+
+### 🛡️ Sandbox Commands (Pro Only)
+```bash
+# Test files in sandbox
+sentvibe sandbox test file.js
+
+# Execute code safely
+sentvibe sandbox execute "console.log('test')"
+
+# Check confidence score
+sentvibe sandbox confidence file.js
+
+# Deploy from sandbox to project
+sentvibe sandbox deploy file.js
+```
+
+### 🔧 Project Management
+```bash
+# Initialize SentVibe in project
+sentvibe init
+
+# Reinitialize (keeps memory)
+sentvibe reinit
+
+# Check project status
+sentvibe status
+
+# Disable SentVibe (preserves data)
+sentvibe uninit
+
+# See AI agent experience
+sentvibe ai-status
+```
+
 ## 💎 Free vs Pro Tiers
 
 ### 🆓 **Free Trial - 30 Days**
@@ -88,6 +308,181 @@ sv license activate <your-license-key>
 
 # Compare features
 sv license compare
+```
+
+## 🤖 AI Integration Guide
+
+### 🎯 Setting Up AI Agents
+
+#### GitHub Copilot (VS Code)
+1. **Open SentVibe project** in VS Code
+2. **Copilot automatically detects** SentVibe environment
+3. **Use commands** in Copilot Chat:
+   ```
+   @sentvibe - Get project context
+   Run: sentvibe memory context
+   ```
+
+#### Claude (via Augment/API)
+1. **Share project context** with Claude
+2. **Ask Claude to run** SentVibe commands:
+   ```
+   "Please run 'sentvibe memory context' to understand this project"
+   ```
+3. **Claude can execute** all SentVibe commands
+
+#### Cursor IDE
+1. **Open project** in Cursor
+2. **AI automatically detects** SentVibe
+3. **Use Cursor's AI** to interact with memory:
+   ```
+   "Use SentVibe to understand this codebase"
+   ```
+
+#### ChatGPT/Custom Integrations
+```javascript
+// Example: Integrate SentVibe with custom AI workflows
+const { exec } = require('child_process');
+
+exec('sentvibe memory context', (error, stdout) => {
+  if (!error) {
+    // Send stdout to your AI agent
+    sendToAI(stdout);
+  }
+});
+```
+
+### 🔄 AI Workflow Examples
+
+#### 1. New Feature Development
+```bash
+# 1. Get current project context
+sentvibe memory context
+
+# 2. Ask AI to analyze and suggest approach
+# AI uses context to understand architecture
+
+# 3. Test AI's code in sandbox (Pro)
+sentvibe sandbox test new-feature.js
+
+# 4. Deploy if confidence > 95%
+sentvibe sandbox deploy new-feature.js
+```
+
+#### 2. Bug Investigation
+```bash
+# 1. Search for similar issues
+sentvibe memory search "authentication error"
+
+# 2. Find patterns in error handling
+sentvibe memory patterns error
+
+# 3. Ask AI to analyze with context
+# AI understands project's error patterns
+```
+
+#### 3. Code Review with AI
+```bash
+# 1. Generate context for reviewer
+sentvibe memory context
+
+# 2. Check confidence of changes
+sentvibe sandbox confidence changed-files.js
+
+# 3. AI reviews with full project understanding
+```
+
+## 🔧 Advanced Usage
+
+### 🎛️ Configuration
+
+#### Project-Level Config
+```json
+// .sentvibe/config.json
+{
+  "memory": {
+    "maxEntries": 10000,
+    "autoContext": true,
+    "patterns": ["*.js", "*.ts", "*.jsx", "*.tsx"]
+  },
+  "sandbox": {
+    "confidenceThreshold": 95,
+    "autoTest": true
+  },
+  "ai": {
+    "welcomeMessages": true,
+    "autoDetection": true
+  }
+}
+```
+
+#### Global Config
+```bash
+# Set global preferences
+sentvibe config set memory.autoContext true
+sentvibe config set sandbox.confidenceThreshold 90
+sentvibe config list
+```
+
+### 🔌 Integrations
+
+#### VS Code Extension
+```json
+// settings.json
+{
+  "sentvibe.autoInit": true,
+  "sentvibe.showWelcome": true,
+  "sentvibe.memorySync": true
+}
+```
+
+#### Git Hooks
+```bash
+# .git/hooks/pre-commit
+#!/bin/sh
+sentvibe memory context > .sentvibe/context.md
+git add .sentvibe/context.md
+```
+
+#### CI/CD Integration
+```yaml
+# .github/workflows/sentvibe.yml
+- name: Generate SentVibe Context
+  run: |
+    npm install -g sentvibe
+    sentvibe license activate ${{ secrets.SENTVIBE_LICENSE }}
+    sentvibe memory context
+```
+
+### 📊 Memory Management
+
+#### Optimize Memory Performance
+```bash
+# Check memory usage
+sentvibe memory stats
+
+# Compact database
+sentvibe memory compact
+
+# Backup memory
+sentvibe memory export backup-$(date +%Y%m%d).json
+
+# Restore from backup
+sentvibe memory import backup-20241201.json
+```
+
+#### Memory Patterns
+```bash
+# View all learned patterns
+sentvibe memory patterns
+
+# Technology-specific patterns
+sentvibe memory patterns react
+sentvibe memory patterns node
+sentvibe memory patterns typescript
+
+# Export patterns for sharing
+sentvibe memory patterns export team-patterns.json
 ```
 
 ## 🎭 For AI Agents
@@ -146,6 +541,125 @@ sv ai-status               # Show what AI agents see
 sv ai welcome [agent]      # Show welcome message
 ```
 
+## 💡 Real-World Examples
+
+### 🚀 Example 1: Building a React App with AI
+
+```bash
+# 1. Start new React project
+npx create-react-app my-app
+cd my-app
+
+# 2. Initialize SentVibe
+sentvibe init
+
+# 3. Generate initial context
+sentvibe memory context
+
+# 4. Ask AI to understand the project
+# "I'm working on a React app with SentVibe. Run 'sentvibe memory context' to see the structure."
+
+# 5. Build a component with AI assistance
+# AI now understands your React setup, dependencies, and patterns
+
+# 6. Test new component (Pro)
+sentvibe sandbox test src/components/NewComponent.jsx
+
+# 7. Deploy if confidence > 95%
+sentvibe sandbox deploy src/components/NewComponent.jsx
+```
+
+### 🔧 Example 2: API Development with Express
+
+```bash
+# 1. Initialize Express project
+mkdir my-api && cd my-api
+npm init -y
+npm install express
+
+# 2. Activate SentVibe
+sentvibe init
+
+# 3. Create initial API structure
+# (AI learns your patterns as you code)
+
+# 4. Search for authentication patterns
+sentvibe memory search "authentication middleware"
+
+# 5. Find similar route implementations
+sentvibe memory similar "user routes"
+
+# 6. Ask AI to build on existing patterns
+# "Based on the authentication patterns in this project, help me add OAuth"
+```
+
+### 🐛 Example 3: Debugging with AI Memory
+
+```bash
+# 1. Investigate error
+sentvibe memory search "database connection error"
+
+# 2. Find similar error handling
+sentvibe memory patterns error
+
+# 3. Get full context for AI
+sentvibe memory context
+
+# 4. Ask AI to analyze
+# "I'm getting database errors. Here's the context from SentVibe memory."
+
+# 5. Test fix in sandbox (Pro)
+sentvibe sandbox test src/database/connection.js
+```
+
+### 🎯 Example 4: Team Onboarding
+
+```bash
+# New team member setup
+# 1. Clone project
+git clone <project-repo>
+cd project
+
+# 2. Install SentVibe
+npm install -g sentvibe
+sentvibe license activate <team-license>
+
+# 3. Get instant project understanding
+sentvibe memory context
+
+# 4. Learn project patterns
+sentvibe memory patterns
+sentvibe memory patterns react
+sentvibe memory patterns api
+
+# 5. Start contributing immediately
+# AI now understands the entire codebase and team patterns
+```
+
+### 🔄 Example 5: Refactoring Legacy Code
+
+```bash
+# 1. Initialize SentVibe in legacy project
+cd legacy-project
+sentvibe init
+
+# 2. Let SentVibe learn existing patterns
+sentvibe memory context
+
+# 3. Search for specific patterns to refactor
+sentvibe memory search "jQuery DOM manipulation"
+sentvibe memory patterns jquery
+
+# 4. Ask AI to suggest modern alternatives
+# "Based on the jQuery patterns in this project, help me refactor to vanilla JS"
+
+# 5. Test refactored code safely (Pro)
+sentvibe sandbox test refactored-module.js
+
+# 6. Deploy incrementally
+sentvibe sandbox deploy refactored-module.js
+```
+
 ## 🏗️ Architecture
 
 ### Auto-Initialization
@@ -187,6 +701,168 @@ Automatically detects and welcomes:
 - **Context**: Full project history and patterns available
 - **Safety**: Experiment freely in secure sandbox
 - **Intelligence**: Build on previous solutions and learnings
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+#### License Activation Failed
+```bash
+# Check license key format
+sentvibe license status
+# Expected: SENTVIBE-MEM-FREE-* or SENTVIBE-MEM-BOX-*
+
+# Verify internet connection
+ping polar.sh
+
+# Check environment variables
+echo $POLAR_ACCESS_TOKEN
+```
+
+#### Memory Commands Not Working
+```bash
+# Ensure project is initialized
+sentvibe status
+# Should show: "SentVibe: Active"
+
+# Reinitialize if needed
+sentvibe uninit
+sentvibe init
+```
+
+#### AI Agent Not Detected
+```bash
+# Check AI status
+sentvibe ai-status
+
+# Verify VS Code integration
+code --version
+# Restart VS Code after SentVibe installation
+```
+
+#### Sandbox Features Blocked
+```bash
+# Check license tier
+sentvibe license status
+# Sandbox requires Pro license
+
+# Upgrade to Pro
+sentvibe license upgrade
+```
+
+### Performance Issues
+
+#### Large Project Memory
+```bash
+# Check memory size
+sentvibe memory stats
+
+# Compact database
+sentvibe memory compact
+
+# Clear old entries
+sentvibe memory clear --older-than 30d
+```
+
+#### Slow Context Generation
+```bash
+# Exclude large directories
+echo "node_modules/" >> .sentignore
+echo "dist/" >> .sentignore
+echo ".git/" >> .sentignore
+```
+
+## 📋 Best Practices
+
+### 🎯 Memory Optimization
+1. **Use .sentignore** to exclude unnecessary files:
+   ```
+   node_modules/
+   dist/
+   build/
+   .git/
+   *.log
+   ```
+
+2. **Regular maintenance**:
+   ```bash
+   # Weekly memory cleanup
+   sentvibe memory compact
+
+   # Monthly backup
+   sentvibe memory export backup-$(date +%Y%m).json
+   ```
+
+3. **Selective pattern learning**:
+   ```bash
+   # Focus on specific technologies
+   sentvibe memory patterns react --only
+   sentvibe memory patterns typescript --only
+   ```
+
+### 🤖 AI Integration Best Practices
+1. **Start conversations with context**:
+   ```
+   "I'm working on a SentVibe-enhanced project. Please run 'sentvibe memory context' first."
+   ```
+
+2. **Use specific memory searches**:
+   ```bash
+   sentvibe memory search "authentication"
+   sentvibe memory similar "error handling"
+   ```
+
+3. **Leverage patterns**:
+   ```bash
+   sentvibe memory patterns react
+   # Share output with AI for better suggestions
+   ```
+
+### 🛡️ Sandbox Best Practices (Pro)
+1. **Test before deploying**:
+   ```bash
+   sentvibe sandbox test new-feature.js
+   # Only deploy if confidence > 95%
+   ```
+
+2. **Use confidence scoring**:
+   ```bash
+   sentvibe sandbox confidence file.js
+   # Review manually if < 90%
+   ```
+
+3. **Batch testing**:
+   ```bash
+   sentvibe sandbox test src/**/*.js
+   # Test multiple files efficiently
+   ```
+
+### 🔧 Team Collaboration
+1. **Share patterns**:
+   ```bash
+   # Export team patterns
+   sentvibe memory patterns export team-patterns.json
+
+   # Import on other machines
+   sentvibe memory patterns import team-patterns.json
+   ```
+
+2. **Consistent configuration**:
+   ```json
+   // .sentvibe/config.json (commit to repo)
+   {
+     "memory": {
+       "patterns": ["src/**/*.{js,ts,jsx,tsx}"],
+       "exclude": ["**/*.test.js", "**/*.spec.js"]
+     }
+   }
+   ```
+
+3. **CI/CD integration**:
+   ```yaml
+   # Generate context for deployment
+   - run: sentvibe memory context > deployment-context.md
+   ```
 
 ## 🛠️ Development
 

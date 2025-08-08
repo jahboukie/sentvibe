@@ -11,6 +11,13 @@ export { SandboxManager } from './sandbox/sandbox-manager.js';
 export { AIDetector } from './ai/detector.js';
 export { AutoInitializer } from './ai/auto-initializer.js';
 
+// Security classes
+export { SecurityManager } from './security/security-manager.js';
+export { ContentSanitizer } from './security/content-sanitizer.js';
+export { FileAccessControl } from './security/file-access-control.js';
+export { DatabaseEncryption } from './security/database-encryption.js';
+export { SecurityTestSuite } from './security/security-test-suite.js';
+
 // Utilities
 export { createLogger } from './utils/logger.js';
 export { colors } from './utils/colors.js';

@@ -1,30 +1,40 @@
 import Database from 'better-sqlite3';
 import { watch } from 'chokidar';
 import { createHash } from 'crypto';
-import { readFileSync, statSync, existsSync } from 'fs';
+import { statSync, existsSync } from 'fs';
 import { join, extname } from 'path';
 import type {
   MemoryEntry,
   ProjectStats
 } from '../types/index.js';
 import { logger } from '../utils/logger.js';
+import { SecurityManager } from '../security/security-manager.js';
 
 export class ProjectMemory {
   private db: Database.Database;
   private watcher?: import('chokidar').FSWatcher | undefined;
   private projectRoot: string;
   private isInitialized = false;
+  private securityManager: SecurityManager;
 
   constructor(dbPath: string) {
     this.projectRoot = dbPath.replace('/.sentvibe/memory.db', '').replace('\\.sentvibe\\memory.db', '');
     this.watcher = undefined;
-    
+
+    // Initialize security manager
+    this.securityManager = new SecurityManager(this.projectRoot, {
+      enableContentSanitization: true,
+      enableFileAccessControl: true,
+      enableDatabaseEncryption: true,
+      strictMode: false // Allow operation with warnings
+    });
+
     // Initialize database
     if (!existsSync(dbPath)) {
       // Create empty file for now
       require('fs').writeFileSync(dbPath, '');
     }
-    
+
     try {
       this.db = new Database(dbPath);
       this.setupDatabase();
@@ -77,6 +87,9 @@ export class ProjectMemory {
         memory_type TEXT DEFAULT 'code', -- 'code', 'pattern', 'decision', 'bug_fix'
         importance_score REAL DEFAULT 1.0,
         related_memories TEXT, -- JSON array of related memory IDs
+        security_processed BOOLEAN DEFAULT 0, -- Whether security processing was applied
+        is_encrypted BOOLEAN DEFAULT 0, -- Whether content is encrypted
+        sensitive_data_redacted BOOLEAN DEFAULT 0, -- Whether sensitive data was redacted
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
@@ -96,6 +109,9 @@ export class ProjectMemory {
         lines_of_code INTEGER,
         complexity_score REAL,
         test_coverage REAL,
+        is_encrypted BOOLEAN DEFAULT 0, -- Whether file content is encrypted
+        security_processed BOOLEAN DEFAULT 0, -- Whether security processing was applied
+        sensitive_data_detected BOOLEAN DEFAULT 0, -- Whether sensitive data was detected
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
@@ -235,6 +251,19 @@ export class ProjectMemory {
     if (this.isInitialized) return;
 
     try {
+      // Initialize security manager first
+      await this.securityManager.initialize();
+      logger.info('Security manager initialized');
+
+      // Run security self-test
+      const securityTest = await this.securityManager.runSecuritySelfTest();
+      if (!securityTest.passed) {
+        logger.warn('Security self-test failed:', securityTest.issues);
+        // Continue with warnings unless in strict mode
+      } else {
+        logger.info('Security self-test passed');
+      }
+
       // Start file watching if not already running
       if (!this.watcher) {
         await this.startFileWatcher();
@@ -244,7 +273,7 @@ export class ProjectMemory {
       await this.updateDailyStats();
 
       this.isInitialized = true;
-      logger.debug('ProjectMemory initialized successfully');
+      logger.debug('ProjectMemory initialized successfully with security features');
     } catch (error) {
       logger.error('ProjectMemory initialization failed:', error);
       throw error;
@@ -252,16 +281,15 @@ export class ProjectMemory {
   }
 
   async startFileWatcher(): Promise<void> {
-    const patterns = ['**/*.{js,ts,jsx,tsx,py,go,rs,java,md,json,yaml,yml}'];
-    const ignored = ['node_modules/**', '.git/**', '.sentvibe/**', 'dist/**', 'build/**'];
+    // Use security manager to get safe watch patterns
+    const patterns = this.securityManager.getWatchPatterns();
 
     try {
       this.watcher = watch(patterns, {
         cwd: this.projectRoot,
-        ignored,
         persistent: true,
         ignoreInitial: true,
-        followSymlinks: false
+        followSymlinks: false // Security: Don't follow symlinks
       });
 
       this.watcher.on('change', (path) => this.onFileChanged(path));
@@ -278,16 +306,27 @@ export class ProjectMemory {
   private async onFileChanged(filePath: string): Promise<void> {
     try {
       const fullPath = join(this.projectRoot, filePath);
+
+      // Use security manager to process file securely
+      const secureResult = await this.securityManager.processFile(fullPath);
+
+      if (!secureResult.success) {
+        logger.warn(`File processing blocked: ${filePath} - ${secureResult.reason}`);
+        if (secureResult.securityIssues) {
+          logger.warn('Security issues:', secureResult.securityIssues);
+        }
+        return;
+      }
+
       const stats = statSync(fullPath);
-      const content = readFileSync(fullPath, 'utf8');
-      const contentHash = createHash('md5').update(content).digest('hex');
+      const contentHash = createHash('md5').update(secureResult.content!).digest('hex');
       const language = this.detectLanguage(filePath);
 
-      // Update file metadata
+      // Update file metadata with security information
       const stmt = this.db.prepare(`
-        INSERT OR REPLACE INTO file_metadata 
-        (file_path, last_modified, size_bytes, content_hash, language, change_type)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO file_metadata
+        (file_path, last_modified, size_bytes, content_hash, language, change_type, is_encrypted, security_processed)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `);
 
       stmt.run(
@@ -296,10 +335,12 @@ export class ProjectMemory {
         stats.size,
         contentHash,
         language,
-        'modified'
+        'modified',
+        secureResult.isEncrypted ? 1 : 0,
+        1 // Security processed
       );
 
-      logger.debug(`File changed: ${filePath}`);
+      logger.debug(`File securely processed: ${filePath}${secureResult.isEncrypted ? ' (encrypted)' : ''}`);
     } catch (error) {
       logger.warn(`Failed to process file change: ${filePath}`, error);
     }
@@ -346,28 +387,46 @@ export class ProjectMemory {
 
   async addMemory(entry: MemoryEntry): Promise<void> {
     try {
+      // Validate memory entry with security manager
+      const validation = this.securityManager.validateMemoryEntry(entry);
+
+      if (!validation.isValid) {
+        logger.warn('Memory entry validation failed:', validation.securityIssues);
+        if (validation.securityIssues.includes('Missing required fields')) {
+          throw new Error('Invalid memory entry: missing required fields');
+        }
+        // For other issues, log warning but continue with sanitized entry
+      }
+
+      const sanitizedEntry = validation.sanitizedEntry || entry;
+
       const stmt = this.db.prepare(`
-        INSERT OR IGNORE INTO project_memory 
-        (file_path, intent, outcome, code_snippet, test_results, context_hash, tags, language, framework, confidence_score, ai_agent, session_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT OR IGNORE INTO project_memory
+        (file_path, intent, outcome, code_snippet, test_results, context_hash, tags, language, framework, confidence_score, ai_agent, session_id, security_processed)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
 
       stmt.run(
-        entry.filePath,
-        entry.intent,
-        entry.outcome,
-        entry.codeSnippet,
-        entry.testResults,
-        entry.contextHash,
-        JSON.stringify(entry.tags || []),
-        entry.language,
-        entry.framework,
-        entry.confidenceScore || 1.0,
-        entry.aiAgent,
-        entry.sessionId
+        sanitizedEntry.filePath,
+        sanitizedEntry.intent,
+        sanitizedEntry.outcome,
+        sanitizedEntry.codeSnippet,
+        sanitizedEntry.testResults,
+        sanitizedEntry.contextHash,
+        JSON.stringify(sanitizedEntry.tags || []),
+        sanitizedEntry.language,
+        sanitizedEntry.framework,
+        sanitizedEntry.confidenceScore || 1.0,
+        sanitizedEntry.aiAgent,
+        sanitizedEntry.sessionId,
+        1 // Security processed
       );
 
-      logger.debug('Memory entry added:', entry.intent);
+      if (validation.securityIssues.length > 0) {
+        logger.debug(`Memory entry added with security sanitization: ${sanitizedEntry.intent} (issues: ${validation.securityIssues.join(', ')})`);
+      } else {
+        logger.debug('Memory entry added:', sanitizedEntry.intent);
+      }
     } catch (error) {
       logger.error('Failed to add memory:', error);
       throw error;
@@ -712,9 +771,26 @@ ${recentMemories.length > 0
         this.db.close();
       }
 
-      logger.debug('ProjectMemory cleanup completed');
+      // Cleanup security manager (clears encryption keys from memory)
+      await this.securityManager.cleanup();
+
+      logger.debug('ProjectMemory cleanup completed with security cleanup');
     } catch (error) {
       logger.error('ProjectMemory cleanup failed:', error);
     }
+  }
+
+  /**
+   * Get security status for the memory system
+   */
+  getSecurityStatus() {
+    return this.securityManager.getSecurityStatus();
+  }
+
+  /**
+   * Run security self-test
+   */
+  async runSecuritySelfTest() {
+    return this.securityManager.runSecuritySelfTest();
   }
 }

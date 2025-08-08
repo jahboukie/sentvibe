@@ -1,5 +1,23 @@
 #!/usr/bin/env node
 
+// Load environment variables silently
+import { config } from 'dotenv';
+
+// Suppress dotenv verbose output
+const originalConsoleLog = console.log;
+const originalConsoleError = console.error;
+console.log = () => {};
+console.error = () => {};
+
+config({
+  debug: false,
+  override: false
+});
+
+// Restore console
+console.log = originalConsoleLog;
+console.error = originalConsoleError;
+
 import { Command } from 'commander';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
